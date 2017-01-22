@@ -148,9 +148,12 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 | 8 | 0x4 | 0x7 | 0x10 | 0xc7 | 0x2 | 0x1 |
 
 * Clearly byte 4 is being used to indicate the Lane the controller is being paired with
-* Presumably this goes into a look up table to determin which channels are mapped to which lane.
+* Presumably this goes into a look up table to determine which channels are mapped to which lane.
+
+# Channel 79
 
 * Channel 79 is odd.. It normally transmits in a cycle as follows:
+
 | Pkt | Byte 0 |  Byte 1 | Byte 2 | Byte 3 | Byte 4 |  Byte 5 |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | 1 | 0x4 | 0x2 | 0x10 | 0x0 | 0x0 | 0x0 |
@@ -170,6 +173,10 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 | 2 | 0x4 | 0x7 | 0x37 | 0x7d | 0xff | 0xff |
 | 3 | 0x4 | 0x1 | 0x10 | 0x06 | 0x00 | 0x81 |
 | 4 | 0x4 | 0x1 | 0x10 | 0x1d | 0xd5 | 0xdf |
+
+* No idea yet what the function of this channel is.
+* It is interesting that during its normal cycle it uses even numbers in Byte 1 rather than odd used by all the other channels..
+
 
 
 
