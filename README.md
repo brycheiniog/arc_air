@@ -42,7 +42,7 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 * Controller does not appear to transmit anything until it recieves something from the base unit.
    * Makes sense from a power saving POV.
 
-# Investigations
+# Radio Configuration
 
 * Connected to controller board via J-Link probe using Segger Embedded Studio
 * Controller paired with track one on the base seems to use channel 5 (2405MHz) and occasionaly swaps to channel 41 (2441MHz)
@@ -98,6 +98,9 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 | POWER  |  	0x1 |
 
 * If you put the controller into pairing mode, it sits waiting for a message on channel 51 (2451MHz).
+
+# Base unit radio activity
+
 * I modified the Radio reciever example (nRF5_SDK_12.2.0_f012efa\examples\peripheral\radio\receiver) from the Nordic nrf58122 SDK with the above parameters and was able to recieve packets.
 * I modified the reciever to scan through all 100 channels looking for packets. I got hits as per this table:
 
@@ -120,6 +123,40 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 | 81 | 2481 | 0x4 0x1 0x10 0xc7 0x2 0x1 | Pairing packet on Lane 2 |
 
 * Presumably the remaining slots are for the 4 additional controllers for the digital ARC Pro system.
+* Note that the payloads above are single snapshots. Byte[1] of the payload changes on a packet by packet basis 0x1, 0x3, 0x5, 0x7 repeat.
+
+* Example dump from Channel 5 with the controller turned off
+
+| Pkt | Byte 0 |  Byte 1 | Byte 2 | Byte 3 | Byte 4 |  Byte 5 |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 1 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 2 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 3 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 4 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 5 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 6 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 7 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x81 |
+| 8 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x81 |
+
+* Example dump from channel 5 with the controller turned on part way through:
+
+| Pkt | Byte 0 |  Byte 1 | Byte 2 | Byte 3 | Byte 4 |  Byte 5 | Notes |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 1 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x81 |  |
+| 2 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x81 | |
+| 3 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x81 | |
+| 4 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x81 | |
+| 5 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x81 | |
+| 6 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x81 | |
+| 7 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x00 | Controller turned on |
+| 8 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x0f | Byte 5 is throttle |
+| 9 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x0f |  |
+| 10 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x0f | |
+| 11 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x0f | |
+| 12 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x0f | |
+| 13 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x3f |  Max throttle is 0x3f |
+
+# Pairing
 
 * Packets transmitted by the base when pairing the lane 1 controller
 
