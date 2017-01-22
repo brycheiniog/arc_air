@@ -1,7 +1,17 @@
-# arc_air
+# Scalextric ARC Air investigation
+
 Reverse engineering the [Scalextric ARC Air](http://www.scalextric.com/uk-en/introducing-arc-air) wireless slot car controller
 
 It is a bit of a brain dump at the moment. The goal is to be able to replace the Scalextric controllers with my own and to be able to record and playback laps..
+
+# Progress so far
+
+* Can connect to the controllers with a debugger
+* Have identified which channels the base unit communicates on.
+* Have packet captures of many of the system interactions
+
+* I have not been able to convince the base unit that my fake controller is real..
+
 
 # Useful Documents
 
