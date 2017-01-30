@@ -9,8 +9,21 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 * Can connect to the controllers with a debugger
 * Have identified which channels the base unit communicates on.
 * Have packet captures of many of the system interactions
+* Dumped the code from the controller
+* Decompiled code from the controller
+* Spent far to long digging through the code
+* Figured out that during normal operation the Radio RX event triggered an immediate subsequent TX event.
+* As in Base sends packet, controller sends ACK with slightly different payload
+* Rewrote packet sniffer to capture more reliably.
+* Foundmy original captures were missing the very fast responses from the controller.
+* Rewrote Controller app for NRF51822 to mimic new captures
+* Base seems to see as valid controller (Green connection light comes on :) )
 
-* I have not been able to convince the base unit that my fake controller is real..
+# Next Steps
+* Tidy Sniffer
+* Investigate channel hopping functionaliy. Controller monitors RSSI so it is probably related to this.
+* Investigate way base tells controller to buzz
+
 
 
 # Useful Documents
@@ -158,13 +171,13 @@ It is a bit of a brain dump at the moment. The goal is to be able to replace the
 | 4 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x81 | |
 | 5 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x81 | |
 | 6 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x81 | |
-| 7 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x00 | Controller turned on |
-| 8 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x0f | Byte 5 is throttle |
-| 9 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x0f |  |
-| 10 | 0x4 | 0x3 | 0x10 | 0x81 | 0x0 | 0x0f | |
-| 11 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x0f | |
-| 12 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x0f | |
-| 13 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x3f |  Max throttle is 0x3f |
+| 7 | 0x4 | 0x3 | 0x12 | 0x01 | 0x0 | 0x00 | Controller turned on |
+| 8 | 0x4 | 0x5 | 0x10 | 0x81 | 0x0 | 0x0f | Byte 5 is throttle |
+| 9 | 0x4 | 0x5 | 0x12 | 0x01 | 0x0 | 0x0f |  |
+| 10 | 0x4 | 0x7 | 0x10 | 0x81 | 0x0 | 0x0f | |
+| 11 | 0x4 | 0x7 | 0x12 | 0x01 | 0x0 | 0x0f | |
+| 12 | 0x4 | 0x1 | 0x10 | 0x81 | 0x0 | 0x0f | |
+| 13 | 0x4 | 0x1 | 0x12 | 0x01 | 0x0 | 0x3f |  Max throttle is 0x3f |
 
 # Pairing
 
